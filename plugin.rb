@@ -41,7 +41,7 @@ after_initialize do
         raw_info.dig("public_metadata", metadata_key) ||
         raw_info.dig(:public_metadata, metadata_key.to_sym)
 
-    unless value.present?
+    if value.blank?
       auth_result.failed = true
       auth_result.failed_reason = I18n.t("access_gate.signup_rejected")
     end
