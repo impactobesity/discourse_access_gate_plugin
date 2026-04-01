@@ -1,4 +1,7 @@
-TODO_plugin_name:
-  plugin_name_enabled:
+access_gate:
+  access_gate_enabled:
     default: false
-    client: true
+    client: false
+  access_gate_metadata_key:
+    default: "forum_onboarded"
+    client: false
