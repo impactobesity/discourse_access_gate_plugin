@@ -117,6 +117,15 @@ describe "AccessGatePlugin" do
       expect(auth_result.failed).to eq(true)
       expect(auth_result.failed_reason).to include("not yet authorized")
     end
+
+    it "sets failed_code to access_gate_rejected" do
+      auth_result = build_auth_result
+      request = build_request(raw_info: { "publicMetadata" => {} })
+
+      DiscourseEvent.trigger(:after_auth, authenticator, auth_result, session, cookies, request)
+
+      expect(auth_result.failed_code).to eq("access_gate_rejected")
+    end
   end
 
   context "when publicMetadata is absent entirely" do

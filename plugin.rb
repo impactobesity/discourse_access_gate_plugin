@@ -14,6 +14,26 @@ module ::AccessGatePlugin
 end
 
 after_initialize do
+  # Override the auth failure handler to redirect to a custom URL
+  # when this plugin rejects a signup. Uses prepend (not add_to_class)
+  # so that `super` preserves default Discourse behavior for all
+  # other auth failures, even if the plugin is disabled.
+  module ::AccessGatePlugin::OmniauthCallbacksOverride
+    def render_auth_result_failure
+      if SiteSetting.access_gate_enabled &&
+           @auth_result.failed_code == "access_gate_rejected" &&
+           SiteSetting.access_gate_redirect_url.present?
+        redirect_to SiteSetting.access_gate_redirect_url, allow_other_host: true
+      else
+        super
+      end
+    end
+  end
+
+  Users::OmniauthCallbacksController.prepend(
+    ::AccessGatePlugin::OmniauthCallbacksOverride,
+  )
+
   on(:after_auth) do |authenticator, auth_result, session, cookies, request|
     next unless SiteSetting.access_gate_enabled
 
@@ -43,6 +63,7 @@ after_initialize do
 
     if value.blank?
       auth_result.failed = true
+      auth_result.failed_code = "access_gate_rejected"
       auth_result.failed_reason = I18n.t("access_gate.signup_rejected")
     end
   end

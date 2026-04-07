@@ -2,5 +2,6 @@ en:
   site_settings:
     access_gate_enabled: "Check OIDC publicMetadata claims before allowing new signups"
     access_gate_metadata_key: "The key within Clerk publicMetadata that must be present for signup to proceed"
+    access_gate_redirect_url: "URL to redirect rejected signups to (e.g. your app download page). Leave blank to show the default Discourse error."
   access_gate:
-    signup_rejected: "Your account is not yet authorized for forum access. Please complete onboarding in the app first."
+    signup_rejected: "Your account is not yet authorized for forum access. Please download the Prospero Health app from your app store."
