@@ -2,9 +2,12 @@ access_gate:
   access_gate_enabled:
     default: false
     area: "oidc"
+    client: true
   access_gate_metadata_key:
     default: "forum_onboarded"
     area: "oidc"
+    client: true
   access_gate_redirect_url:
     default: ""
     area: "oidc"
+    client: true
